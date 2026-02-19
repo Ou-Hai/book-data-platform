@@ -18,3 +18,5 @@ notebooks/.env
 
 .DS_Store
 notebooks/.DS_Store
+
+data/
