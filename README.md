@@ -1,2 +1,5 @@
 # book-data-platform
-Data platform + scenario-based book recommender (Airflow, Docker, Parquet)
+
+## Project Goal
+
+Build a production-style data platform for a scenario-based book recommendation system using Airflow, Docker, and Parquet.
