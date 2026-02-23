@@ -19,4 +19,9 @@ notebooks/.env
 .DS_Store
 notebooks/.DS_Store
 
-data/
+# ignore all data
+data/*
+
+# but keep sample folder
+!data/sample/
+!data/sample/**
