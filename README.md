@@ -81,6 +81,7 @@ uv run python src/retrieval/query_similar.py \
   --query-text "mafia family crime in New York with loyalty and betrayal" \
   --topk 5 \
   --json
+```
 
 ---
 
@@ -120,3 +121,4 @@ python src/transformation/join_books_text.py
 python src/embedding/prepare_embedding_input.py
 python src/embedding/embed_books.py --provider local
 python src/retrieval/build_faiss_index.py
+```
