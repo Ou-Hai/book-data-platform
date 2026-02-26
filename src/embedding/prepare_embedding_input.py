@@ -26,7 +26,7 @@ def build_book_text(row: pd.Series) -> str:
 
 def main():
 
-    input_path = Path("data/silver/joined/openlibrary_books_joined_2026-02-23.parquet")
+    input_path = Path("data/silver/joined/openlibrary_books_joined_2026-02-26.parquet")
     output_path = Path("data/gold/books_embedding_input.parquet")
 
     print("Reading joined dataset...")
@@ -37,8 +37,7 @@ def main():
 
     # Define usability based on description length (simple + robust)
     df["description"] = df["description"].fillna("")
-    df["desc_len"] = df["description"].str.len()
-    df = df[df["desc_len"] >= 30].copy()
+    
 
     print(f"Usable books (desc_len>=30): {len(df)}")
 
@@ -47,7 +46,7 @@ def main():
     df["book_text"] = df.apply(build_book_text, axis=1)
 
     # Keep only necessary columns
-    df_final = df[["key", "title", "book_text"]]
+    df_final = df[["key", "title", "book_text", "cover_i"]]
 
     # Create gold directory if needed
     output_path.parent.mkdir(parents=True, exist_ok=True)

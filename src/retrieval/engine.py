@@ -67,13 +67,29 @@ class SemanticSearchEngine:
 
         return vec.reshape(1, -1)
 
-    def _get_snippet(self, key: str, n: int = 180) -> str:
+    def _get_snippet(self, key: str, max_len: int = 600) -> str:
         match = self.joined[self.joined["key"] == key]
-        if len(match) == 0:
+        if match.empty:
             return ""
-        text = str(match.iloc[0].get("description", "") or "")
-        text = text.replace("\n", " ").strip()
-        return text[:n] + ("..." if len(text) > n else "")
+
+        val = match.iloc[0].get("description", "")
+        if pd.isna(val):
+            val = ""
+
+        text = str(val)
+        return text[:max_len] + ("..." if len(text) > max_len else "")
+    
+    def get_snippet(self, book_id: str, n: int = 180) -> str:
+        return self._get_snippet(book_id, max_len=n)
+    
+    def get_description(self, key: str) -> str:
+        match = self.joined[self.joined["key"] == key]
+        if match.empty:
+            return ""
+        val = match.iloc[0].get("description", "")
+        if pd.isna(val):
+            return ""
+        return str(val)
 
     def search_by_text(self, query_text: str, topk: int = 10) -> List[Dict]:
         query_vector = self._embed_text(query_text)
@@ -88,15 +104,17 @@ class SemanticSearchEngine:
                 if "title" in self.meta.columns
                 else ""
             )
+            cover_i = self.meta.iloc[idx].get("cover_i") if "cover_i" in self.meta.columns else None
 
             results.append(
                 {
-                    "key": key,
+                    "book_id": key,
                     "title": title,
                     "score": float(score),
                     "snippet": self._get_snippet(key),
+                    "cover_i": int(cover_i) if cover_i and not pd.isna(cover_i) else None,
                 }
-            )
+            ) 
 
         return results
 
@@ -126,7 +144,7 @@ class SemanticSearchEngine:
 
             results.append(
                 {
-                    "key": result_key,
+                    "book_id": result_key,
                     "title": title,
                     "score": float(score),
                     "snippet": self._get_snippet(result_key),

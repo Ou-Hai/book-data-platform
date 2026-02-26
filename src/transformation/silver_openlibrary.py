@@ -43,7 +43,7 @@ def bronze_to_silver(ingestion_date: str) -> tuple[Path, Path]:
 
     df = pd.DataFrame(all_docs)
 
-    meta_cols = ["key", "title", "author_name", "first_publish_year", "language"]
+    meta_cols = ["key", "title", "author_name", "first_publish_year", "language", "cover_i"]
     meta_cols = [c for c in meta_cols if c in df.columns]
     meta = df[meta_cols].copy()
 

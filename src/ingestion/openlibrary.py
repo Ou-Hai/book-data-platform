@@ -84,7 +84,7 @@ def ingest_openlibrary_many(
             total_docs += len(docs)
             print(f"[OK] q={q} page={page} docs={len(docs)} total_docs={total_docs} -> {out_file}")
 
-            # 达到上限就结束
+            
             if total_docs >= max_docs:
                 break
 

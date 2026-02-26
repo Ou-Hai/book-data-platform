@@ -70,6 +70,8 @@ def main():
     meta_cols = ["key"]
     if "title" in df.columns:
         meta_cols.append("title")
+    if "cover_i" in df.columns:
+        meta_cols.append("cover_i")
     meta = df[meta_cols].reset_index(drop=True)
     meta.to_parquet(meta_out, index=False)
 

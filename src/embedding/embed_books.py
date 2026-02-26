@@ -176,11 +176,11 @@ def main():
     if args.limit and args.limit > 0:
         df = df.head(args.limit).copy()
 
-    existing = load_existing_keys(output_path)
-    if existing:
-        before = len(df)
-        df = df[~df["key"].isin(existing)].copy()
-        print(f"[{_now_ts()}] Resume: skip {before - len(df)} already-embedded rows")
+    #existing = load_existing_keys(output_path)
+    #if existing:
+        #before = len(df)
+        #df = df[~df["key"].isin(existing)].copy()
+        #print(f"[{_now_ts()}] Resume: skip {before - len(df)} already-embedded rows")
 
     if len(df) == 0:
         print(f"[{_now_ts()}] Nothing to do. Output already up to date: {output_path}")
@@ -210,13 +210,15 @@ def main():
             batch_embs = embed_texts_openai(batch_texts, model=args.model)
             model_used = args.model
 
+        cover_vals = df.iloc[idxs]["cover_i"].tolist() if "cover_i" in df.columns else [None]*len(batch_keys)
         df_new = pd.DataFrame(
             {
                 "key": batch_keys,
                 "title": batch_titles,
+                "cover_i": cover_vals,
                 "model": [model_used] * len(batch_keys),
                 "embedded_at": [_now_ts()] * len(batch_keys),
-                "embedding": batch_embs,  # list[float]
+                "embedding": batch_embs,
             }
         )
 
